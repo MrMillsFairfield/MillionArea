@@ -1,0 +1,2145 @@
+<!DOCTYPE html>
+<html lang="en" class="dark h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Who Wants to be a Millionaire: Geometry Area & Perimeter Edition</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            tv: {
+              bg: '#03050c',
+              panel: '#080d1e',
+              card: '#0f172a',
+              gold: '#facc15',
+              goldDark: '#ca8a04',
+              goldGlow: '#fef08a',
+              blueGlow: '#2563eb',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['Roboto Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts & FontAwesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Roboto+Mono:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100vw;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: radial-gradient(circle at center, #0c132c 0%, #020308 100%);
+      color: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Metallic Option Buttons */
+    .btn-option {
+      background: linear-gradient(180deg, #0e1738 0%, #060a1c 100%);
+      border: 2px solid #1d4ed8;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      transition: all 0.15s ease-in-out;
+      position: relative;
+    }
+
+    .btn-option:hover:not(:disabled) {
+      background: linear-gradient(180deg, #1e3a8a 0%, #1e293b 100%);
+      border-color: #facc15;
+      box-shadow: 0 0 12px rgba(250, 204, 21, 0.4);
+      transform: scale(1.005);
+    }
+
+    .btn-option.selected {
+      background: linear-gradient(180deg, #d97706 0%, #92400e 100%) !important;
+      border-color: #fef08a !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.8) !important;
+      animation: pulse-orange 0.8s infinite alternate;
+    }
+
+    .btn-option.locked {
+      background: linear-gradient(180deg, #ca8a04 0%, #854d0e 100%) !important;
+      border-color: #ffffff !important;
+      animation: flash-gold 0.3s infinite alternate;
+    }
+
+    .btn-option.correct {
+      background: linear-gradient(180deg, #15803d 0%, #166534 100%) !important;
+      border-color: #4ade80 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 25px rgba(74, 222, 128, 0.9) !important;
+      animation: flash-green 0.3s infinite alternate;
+    }
+
+    .btn-option.wrong {
+      background: linear-gradient(180deg, #b91c1c 0%, #991b1b 100%) !important;
+      border-color: #f87171 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 20px rgba(248, 113, 113, 0.7) !important;
+    }
+
+    .btn-option.disabled-5050 {
+      opacity: 0.2;
+      pointer-events: none;
+      filter: grayscale(100%);
+      border-color: #334155;
+    }
+
+    @keyframes pulse-orange {
+      from { box-shadow: 0 0 10px rgba(245, 158, 11, 0.5); }
+      to { box-shadow: 0 0 22px rgba(245, 158, 11, 0.95); }
+    }
+
+    @keyframes flash-gold {
+      from { opacity: 0.85; }
+      to { opacity: 1; transform: scale(1.01); }
+    }
+
+    @keyframes flash-green {
+      from { opacity: 0.8; }
+      to { opacity: 1; transform: scale(1.02); }
+    }
+
+    /* Lock It In Lock Button */
+    .btn-lock {
+      background: linear-gradient(180deg, #eab308 0%, #ca8a04 100%);
+      border: 2px solid #fef08a;
+      color: #000000;
+      font-weight: 900;
+      box-shadow: 0 0 15px rgba(234, 179, 8, 0.6);
+      transition: all 0.2s ease;
+    }
+
+    .btn-lock:hover:not(:disabled) {
+      background: linear-gradient(180deg, #facc15 0%, #eab308 100%);
+      box-shadow: 0 0 25px rgba(250, 204, 21, 0.9);
+      transform: translateY(-1px);
+    }
+
+    .btn-lock:disabled {
+      background: #1e293b;
+      border-color: #475569;
+      color: #64748b;
+      box-shadow: none;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    /* TV Oval Lifeline Buttons */
+    .oval-lifeline {
+      width: 52px;
+      height: 32px;
+      border-radius: 9999px;
+      border: 2px solid #ffffff;
+      background: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 11px;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.8);
+      cursor: pointer;
+    }
+
+    .oval-lifeline:hover:not(:disabled) {
+      border-color: #facc15;
+      color: #facc15;
+      box-shadow: 0 0 12px rgba(250, 204, 21, 0.8);
+      transform: scale(1.05);
+    }
+
+    .oval-lifeline:disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
+      border-color: #475569;
+      position: relative;
+    }
+
+    .oval-lifeline:disabled::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, transparent 45%, #ef4444 45%, #ef4444 55%, transparent 55%);
+      border-radius: 9999px;
+    }
+
+    /* Prize Ladder Rows */
+    .ladder-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5px 8px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+      transition: all 0.3s ease;
+    }
+
+    .ladder-row.milestone {
+      font-weight: 900;
+      color: #ffffff;
+    }
+
+    .ladder-row.standard {
+      color: #f97316;
+    }
+
+    .ladder-row.passed {
+      color: #e2e8f0;
+      opacity: 0.6;
+    }
+
+    .ladder-row.active {
+      background: #e2e8f0;
+      color: #020617 !important;
+      font-weight: 900 !important;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+      transform: scale(1.02);
+    }
+
+    .ladder-row.active .diamond {
+      color: #020617 !important;
+    }
+
+    /* Flying Orb Particle Animation */
+    .flying-orb {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fef08a 0%, #facc15 50%, #d97706 100%);
+      box-shadow: 0 0 20px #facc15, 0 0 40px #f59e0b;
+      pointer-events: none;
+      z-index: 100;
+      transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .animate-spin-slow {
+      animation: spin-slow 40s linear infinite;
+    }
+  </style>
+</head>
+<body class="flex w-full h-full p-2 sm:p-3 gap-2 sm:gap-3 bg-tv-bg select-none overflow-hidden relative">
+
+  <!-- HOME SCREEN OVERLAY -->
+  <div id="screenHome" class="fixed inset-0 z-40 bg-[#03050c] flex flex-col items-center justify-between p-4 sm:p-6 overflow-y-auto">
+    
+    <div class="flex-1 flex flex-col items-center justify-center max-w-lg w-full text-center my-auto space-y-6">
+      
+      <!-- LOGO -->
+      <div class="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center group shrink-0">
+        <div class="absolute inset-0 rounded-full bg-blue-600/20 blur-2xl animate-pulse"></div>
+        <div class="absolute inset-0 rounded-full border-4 border-amber-400/80 shadow-[0_0_30px_rgba(250,204,21,0.4)] bg-gradient-to-tr from-[#050b24] via-[#0f173d] to-[#1e1b4b] flex items-center justify-center overflow-hidden">
+          
+          <svg class="absolute inset-0 w-full h-full opacity-30 animate-spin-slow" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="90" fill="none" stroke="#facc15" stroke-width="1.5" stroke-dasharray="2,4" />
+            <circle cx="100" cy="100" r="70" fill="none" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4,4" />
+            <circle cx="100" cy="100" r="50" fill="none" stroke="#facc15" stroke-width="1" />
+          </svg>
+
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="text-[10px] sm:text-xs font-black tracking-[0.25em] text-amber-300 uppercase px-6 text-center leading-tight">
+              WHO WANTS TO BE A
+            </span>
+          </div>
+
+          <div class="absolute w-full bg-gradient-to-r from-amber-600 via-amber-400 to-amber-600 border-y-2 border-white shadow-xl py-1.5 flex items-center justify-center">
+            <h1 class="text-xl sm:text-2xl font-black text-black tracking-widest uppercase font-mono drop-shadow">
+              MATH MILLIONAIRE
+            </h1>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Tagline & Description -->
+      <div>
+        <p class="text-xs sm:text-sm text-slate-300 font-medium max-w-sm mx-auto">
+          Master the <span class="text-amber-400 font-bold">Area & Perimeter</span> of triangles, rectangles, parallelograms, and composite figures to win <span class="text-amber-400 font-bold">$1,000,000</span>!
+        </p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="w-full space-y-3 pt-2">
+        <button id="btnStartGame" class="w-full py-3.5 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:from-amber-400 hover:to-yellow-300 text-black font-black text-sm uppercase tracking-wider rounded-xl shadow-lg shadow-amber-500/20 transition transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-play"></i>
+          <span>Play Game</span>
+        </button>
+
+        <div class="grid grid-cols-2 gap-3">
+          <button id="btnHomeLeaderboard" class="py-2.5 bg-slate-900 hover:bg-slate-800 border border-indigo-500/50 text-indigo-300 font-bold text-xs uppercase tracking-wider rounded-xl transition flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-trophy text-amber-400"></i>
+            <span>Leaderboard</span>
+          </button>
+          
+          <button id="btnHomeRules" class="py-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold text-xs uppercase tracking-wider rounded-xl transition flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-circle-info text-sky-400"></i>
+            <span>How to Play</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="text-[11px] text-slate-500 font-medium">
+      Who Wants to be a Millionaire &copy; Area & Perimeter Geometry Edition
+    </footer>
+
+  </div>
+
+  <!-- LEFT GAME PANEL -->
+  <main class="flex-1 flex flex-col h-full gap-2 justify-between min-w-0">
+    
+    <!-- TOP BAR -->
+    <header class="w-full bg-tv-panel/90 border border-slate-800 rounded-xl px-3 py-2 flex items-center justify-between shadow-lg shrink-0">
+      <div class="flex items-center gap-2 cursor-pointer" id="btnHeaderHome">
+        <i class="fa-solid fa-shapes text-amber-400 text-lg"></i>
+        <span class="text-xs sm:text-sm font-black tracking-widest text-amber-400 uppercase">Geometry Millionaire</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="btnHeaderLeaderboard" class="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 rounded-lg text-xs transition flex items-center gap-1.5">
+          <i class="fa-solid fa-trophy text-amber-400"></i>
+          <span class="hidden sm:inline text-[11px] font-bold">Leaderboard</span>
+        </button>
+
+        <button id="btnToggleAudio" class="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 rounded-lg text-xs transition flex items-center gap-1.5">
+          <i id="audioIcon" class="fa-solid fa-volume-high text-amber-400"></i>
+          <span class="hidden sm:inline text-[11px] font-bold">Sound</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- CENTER: GEOMETRY CANVAS -->
+    <div class="flex-1 bg-tv-panel/90 border border-slate-800/80 rounded-2xl shadow-2xl overflow-hidden relative flex items-center justify-center min-h-0">
+      <canvas id="geometryCanvas" class="w-full h-full object-contain cursor-default"></canvas>
+    </div>
+
+    <!-- BOTTOM: QUESTION & OPTIONS -->
+    <div class="flex flex-col gap-2 shrink-0">
+      
+      <!-- Question Prompt Bar -->
+      <div class="bg-tv-panel border-2 border-amber-500/60 rounded-xl py-2 px-4 text-center shadow-lg relative">
+        <p id="textQuestionPrompt" class="text-xs sm:text-sm md:text-base font-black text-slate-100 tracking-wide">
+          Loading Question...
+        </p>
+      </div>
+
+      <!-- 2x2 Options Grid -->
+      <div class="grid grid-cols-2 gap-2 sm:gap-2.5">
+        
+        <!-- Option A -->
+        <button id="btnOptionA" class="btn-option group p-2.5 sm:p-3 rounded-xl text-left flex items-center gap-2.5 sm:gap-3 w-full">
+          <span class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 font-black text-xs sm:text-sm flex items-center justify-center shrink-0 group-hover:bg-amber-400 group-hover:text-black transition">A</span>
+          <span id="textOptionA" class="text-xs sm:text-sm font-extrabold text-slate-100 font-mono tracking-wide">--</span>
+        </button>
+
+        <!-- Option B -->
+        <button id="btnOptionB" class="btn-option group p-2.5 sm:p-3 rounded-xl text-left flex items-center gap-2.5 sm:gap-3 w-full">
+          <span class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 font-black text-xs sm:text-sm flex items-center justify-center shrink-0 group-hover:bg-amber-400 group-hover:text-black transition">B</span>
+          <span id="textOptionB" class="text-xs sm:text-sm font-extrabold text-slate-100 font-mono tracking-wide">--</span>
+        </button>
+
+        <!-- Option C -->
+        <button id="btnOptionC" class="btn-option group p-2.5 sm:p-3 rounded-xl text-left flex items-center gap-2.5 sm:gap-3 w-full">
+          <span class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 font-black text-xs sm:text-sm flex items-center justify-center shrink-0 group-hover:bg-amber-400 group-hover:text-black transition">C</span>
+          <span id="textOptionC" class="text-xs sm:text-sm font-extrabold text-slate-100 font-mono tracking-wide">--</span>
+        </button>
+
+        <!-- Option D -->
+        <button id="btnOptionD" class="btn-option group p-2.5 sm:p-3 rounded-xl text-left flex items-center gap-2.5 sm:gap-3 w-full">
+          <span class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 font-black text-xs sm:text-sm flex items-center justify-center shrink-0 group-hover:bg-amber-400 group-hover:text-black transition">D</span>
+          <span id="textOptionD" class="text-xs sm:text-sm font-extrabold text-slate-100 font-mono tracking-wide">--</span>
+        </button>
+
+      </div>
+
+      <!-- Lock-In Button -->
+      <div class="flex items-center justify-center gap-3">
+        <button id="btnLockIn" class="btn-lock w-full max-w-xs py-2 rounded-xl text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2" disabled>
+          <i class="fa-solid fa-lock"></i>
+          <span>Lock It In</span>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- RIGHT SIDE: PRIZE LADDER & LIFELINES -->
+  <aside class="w-48 sm:w-56 md:w-60 bg-[#00020a] border border-slate-800/80 rounded-2xl p-2.5 flex flex-col justify-between shadow-2xl shrink-0 h-full">
+    
+    <!-- Lifelines -->
+    <div class="flex items-center justify-center gap-2.5 pt-1 pb-3 border-b border-slate-800/80">
+      <button id="btnLifeline5050" class="oval-lifeline" title="50:50">50:50</button>
+      <button id="btnLifelinePhone" class="oval-lifeline" title="Phone A Friend">
+        <i class="fa-solid fa-phone-flip text-xs"></i>
+      </button>
+      <button id="btnLifelineAudience" class="oval-lifeline" title="Ask The Audience">
+        <i class="fa-solid fa-users text-xs"></i>
+      </button>
+    </div>
+
+    <!-- Prize Ladder -->
+    <div id="prizeLadderContainer" class="flex-1 flex flex-col justify-between py-2 overflow-hidden">
+    </div>
+
+  </aside>
+
+  <!-- MODALS -->
+
+  <!-- MODAL: HOW TO PLAY -->
+  <div id="modalRules" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-tv-panel border-2 border-sky-500/60 rounded-2xl p-5 max-w-md w-full shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+        <h3 class="text-sm font-extrabold text-sky-400 flex items-center gap-2">
+          <i class="fa-solid fa-book-open"></i> Geometry Rules & Formulas
+        </h3>
+        <button id="btnCloseRules" class="text-slate-400 hover:text-white font-bold text-sm">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs text-slate-300 leading-relaxed max-h-72 overflow-y-auto pr-1">
+        <div class="p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1">
+          <span class="font-bold text-amber-400">1. Rectangle</span>
+          <p>Area = <strong class="text-white">base × height</strong></p>
+          <p>Perimeter = <strong class="text-white">2 × (length + width)</strong></p>
+        </div>
+        <div class="p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1">
+          <span class="font-bold text-amber-400">2. Triangle</span>
+          <p>Area = <strong class="text-white">½ × base × perpendicular height</strong></p>
+          <p>Perimeter = <strong class="text-white">side a + side b + side c</strong></p>
+        </div>
+        <div class="p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1">
+          <span class="font-bold text-amber-400">3. Parallelogram</span>
+          <p>Area = <strong class="text-white">base × perpendicular height</strong></p>
+          <p>Perimeter = <strong class="text-white">2 × (base + slant side)</strong></p>
+        </div>
+        <div class="p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1">
+          <span class="font-bold text-amber-400">4. Composite Shapes (Last 8 Questions)</span>
+          <p>Break down the figure into simpler shapes (rectangles, triangles, parallelograms), calculate each sub-area, and add (or subtract cutouts) to find the total!</p>
+        </div>
+      </div>
+
+      <button id="btnOKRules" class="w-full py-2 bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs uppercase rounded-xl transition shadow">
+        Got It
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: LEADERBOARD -->
+  <div id="modalLeaderboard" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-tv-panel border-2 border-amber-500/60 rounded-2xl p-5 max-w-md w-full shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+        <h3 class="text-sm font-extrabold text-amber-400 flex items-center gap-2">
+          <i class="fa-solid fa-trophy"></i> Hall of Fame Leaderboard
+        </h3>
+        <button id="btnCloseLeaderboard" class="text-slate-400 hover:text-white font-bold text-sm">✕</button>
+      </div>
+
+      <div class="bg-slate-950 rounded-xl border border-slate-800 overflow-hidden max-h-64 overflow-y-auto">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-900 text-amber-400 font-bold border-b border-slate-800">
+            <tr>
+              <th class="p-2">#</th>
+              <th class="p-2">Name</th>
+              <th class="p-2 text-right">Prize Won</th>
+              <th class="p-2 text-right">Date</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardTableBody" class="divide-y divide-slate-800/60 text-slate-200 font-mono">
+          </tbody>
+        </table>
+      </div>
+
+      <button id="btnOKLeaderboard" class="w-full py-2 bg-amber-500 hover:bg-amber-400 text-black font-black text-xs uppercase rounded-xl transition shadow">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: ASK THE AUDIENCE -->
+  <div id="modalAudience" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-tv-panel border-2 border-indigo-500/60 rounded-2xl p-5 max-w-sm w-full text-center shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+        <h3 class="text-sm font-extrabold text-amber-400 flex items-center gap-2">
+          <i class="fa-solid fa-users"></i> Audience Poll
+        </h3>
+        <button id="btnCloseAudience" class="text-slate-400 hover:text-white font-bold text-sm">✕</button>
+      </div>
+
+      <div class="h-44 flex items-end justify-between gap-3 px-3 pt-6 pb-2 bg-slate-950 rounded-xl border border-slate-800">
+        <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end">
+          <span id="valBarA" class="text-[11px] font-mono font-bold text-amber-400">0%</span>
+          <div id="barA" class="w-full bg-gradient-to-t from-indigo-600 to-amber-400 rounded-t transition-all duration-1000" style="height: 0%;"></div>
+          <span class="text-xs font-bold text-slate-300">A</span>
+        </div>
+        <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end">
+          <span id="valBarB" class="text-[11px] font-mono font-bold text-amber-400">0%</span>
+          <div id="barB" class="w-full bg-gradient-to-t from-indigo-600 to-amber-400 rounded-t transition-all duration-1000" style="height: 0%;"></div>
+          <span class="text-xs font-bold text-slate-300">B</span>
+        </div>
+        <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end">
+          <span id="valBarC" class="text-[11px] font-mono font-bold text-amber-400">0%</span>
+          <div id="barC" class="w-full bg-gradient-to-t from-indigo-600 to-amber-400 rounded-t transition-all duration-1000" style="height: 0%;"></div>
+          <span class="text-xs font-bold text-slate-300">C</span>
+        </div>
+        <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end">
+          <span id="valBarD" class="text-[11px] font-mono font-bold text-amber-400">0%</span>
+          <div id="barD" class="w-full bg-gradient-to-t from-indigo-600 to-amber-400 rounded-t transition-all duration-1000" style="height: 0%;"></div>
+          <span class="text-xs font-bold text-slate-300">D</span>
+        </div>
+      </div>
+
+      <button id="btnOKAudience" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs uppercase rounded-xl transition shadow">
+        Continue
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: PHONE A FRIEND -->
+  <div id="modalPhone" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-tv-panel border-2 border-emerald-500/60 rounded-2xl p-5 max-w-md w-full shadow-2xl space-y-4">
+      
+      <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+        <div class="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-400 text-lg animate-pulse">
+          <i class="fa-solid fa-phone-flip"></i>
+        </div>
+        <div>
+          <h3 class="text-sm font-extrabold text-white">Calling Dr. Alex (Math Expert)...</h3>
+          <p id="phoneStatusText" class="text-xs text-emerald-400 font-medium">Call Connected</p>
+        </div>
+      </div>
+
+      <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 max-h-[220px] overflow-y-auto">
+        <p id="phoneDialogueText" class="text-xs sm:text-sm text-slate-200 leading-relaxed font-mono whitespace-pre-wrap break-words">
+        </p>
+      </div>
+
+      <button id="btnOKPhone" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase rounded-xl transition shadow">
+        Thanks, Alex!
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: GAME OVER -->
+  <div id="modalGameOver" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-tv-panel border-2 border-rose-600/60 rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl space-y-4">
+      <div class="w-14 h-14 mx-auto rounded-full bg-rose-500/20 border border-rose-500/50 flex items-center justify-center text-rose-400 text-2xl">
+        <i class="fa-solid fa-circle-xmark"></i>
+      </div>
+      <div>
+        <h2 class="text-xl font-black text-white">Incorrect Answer!</h2>
+        <p class="text-xs text-slate-400 mt-1">That wasn't the correct answer.</p>
+      </div>
+
+      <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+        <span class="text-[10px] text-slate-400 font-bold uppercase block">Guaranteed Prize</span>
+        <div id="textGameOverPrize" class="text-2xl font-black text-amber-400 font-mono">$0</div>
+      </div>
+
+      <div class="text-left space-y-1">
+        <label class="text-[11px] font-bold text-slate-300">Enter Your Name for Leaderboard:</label>
+        <input id="inputGameOverName" type="text" maxlength="16" placeholder="Your Name" class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-amber-400 font-mono">
+      </div>
+
+      <div class="flex gap-2">
+        <button id="btnSaveGameOverScore" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs uppercase rounded-xl transition">
+          Save Score
+        </button>
+        <button id="btnPlayAgain" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase rounded-xl transition shadow">
+          Play Again
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: $1,000,000 VICTORY -->
+  <div id="modalWin" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <canvas id="fireworksCanvas" class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
+    <div class="bg-tv-panel/95 border-2 border-amber-400 rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl space-y-4 relative z-10">
+      <div class="w-16 h-16 mx-auto rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-black text-3xl shadow-xl shadow-amber-500/30 animate-bounce">
+        <i class="fa-solid fa-trophy"></i>
+      </div>
+      <div>
+        <h2 class="text-2xl font-black text-amber-400 uppercase tracking-wide">MATH MILLIONAIRE!</h2>
+        <p class="text-xs text-amber-200/80 mt-1">You solved all 15 area & perimeter levels!</p>
+      </div>
+
+      <div class="bg-slate-950 p-3 rounded-xl border border-amber-500/50">
+        <span class="text-[10px] text-slate-400 font-bold uppercase block">Grand Prize</span>
+        <div class="text-3xl font-black text-amber-400 font-mono">$1,000,000</div>
+      </div>
+
+      <div class="text-left space-y-1">
+        <label class="text-[11px] font-bold text-amber-300">Enter Champion Name:</label>
+        <input id="inputWinName" type="text" maxlength="16" placeholder="Champion Name" class="w-full px-3 py-2 bg-slate-950 border border-amber-500/50 rounded-lg text-xs text-white focus:outline-none focus:border-amber-400 font-mono">
+      </div>
+
+      <div class="flex gap-2">
+        <button id="btnSaveWinScore" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs uppercase rounded-xl transition">
+          Save Score
+        </button>
+        <button id="btnWinPlayAgain" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase rounded-xl transition shadow">
+          Play Again
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUDIO ENGINE -->
+  <script>
+    class AudioEngine {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      playClick() {
+        if (!this.enabled) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(300, this.ctx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.04);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.04);
+      }
+
+      playLockIn() {
+        if (!this.enabled) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(140, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(220, this.ctx.currentTime + 0.5);
+        gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.5);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.5);
+      }
+
+      playCash() {
+        if (!this.enabled) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        const freqs = [987.77, 1318.51, 1567.98, 2093.00];
+        freqs.forEach((f, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(f, now + i * 0.04);
+          gain.gain.setValueAtTime(0.2, now + i * 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.04 + 0.3);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now + i * 0.04);
+          osc.stop(now + i * 0.04 + 0.3);
+        });
+      }
+
+      playCorrect() {
+        if (!this.enabled) return;
+        this.playCash();
+      }
+
+      playWrong() {
+        if (!this.enabled) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(180, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(60, this.ctx.currentTime + 0.35);
+        gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.35);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.35);
+      }
+
+      playLifeline() {
+        if (!this.enabled) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(350, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(900, this.ctx.currentTime + 0.18);
+        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.18);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.18);
+      }
+
+      playWin() {
+        if (!this.enabled) return;
+        this.init();
+        const arpeggio = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
+        arpeggio.forEach((freq, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime + i * 0.1);
+          gain.gain.setValueAtTime(0.25, this.ctx.currentTime + i * 0.1);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + i * 0.1 + 0.4);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(this.ctx.currentTime + i * 0.1);
+          osc.stop(this.ctx.currentTime + i * 0.1 + 0.4);
+        });
+      }
+    }
+
+    const audio = new AudioEngine();
+  </script>
+
+  <!-- PRIZE TIERS & QUESTION GENERATOR -->
+  <script>
+    const PRIZE_TIERS = [
+      { num: 1,  amount: 100,     formatted: "$100",       safe: false },
+      { num: 2,  amount: 200,     formatted: "$200",       safe: false },
+      { num: 3,  amount: 300,     formatted: "$300",       safe: false },
+      { num: 4,  amount: 500,     formatted: "$500",       safe: false },
+      { num: 5,  amount: 1000,    formatted: "$1,000",     safe: true  },
+      { num: 6,  amount: 2000,    formatted: "$2,000",     safe: false },
+      { num: 7,  amount: 4000,    formatted: "$4,000",     safe: false },
+      { num: 8,  amount: 8000,    formatted: "$8,000",     safe: false },
+      { num: 9,  amount: 16000,   formatted: "$16,000",    safe: false },
+      { num: 10, amount: 32000,   formatted: "$32,000",    safe: true  },
+      { num: 11, amount: 64000,   formatted: "$64,000",    safe: false },
+      { num: 12, amount: 125000,  formatted: "$125,000",   safe: false },
+      { num: 13, amount: 250000,  formatted: "$250,000",   safe: false },
+      { num: 14, amount: 500000,  formatted: "$500,000",   safe: false },
+      { num: 15, amount: 1000000, formatted: "$1 MILLION", safe: true  }
+    ];
+
+    class QuestionGenerator {
+      static rand(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      static buildChoices(correctVal, unit, distractorPool = []) {
+        const pool = new Set();
+        pool.add(correctVal);
+
+        distractorPool.forEach(d => {
+          const val = Math.round(d);
+          if (val > 0 && val !== correctVal) {
+            pool.add(val);
+          }
+        });
+
+        const offsets = [10, -10, 15, -12, 20, -18, 25, 8, -8, 30];
+        let i = 0;
+        while (pool.size < 4 && i < offsets.length) {
+          const alt = correctVal + offsets[i];
+          if (alt > 0 && alt !== correctVal) {
+            pool.add(alt);
+          }
+          i++;
+        }
+
+        const arr = Array.from(pool).slice(0, 4);
+        for (let k = arr.length - 1; k > 0; k--) {
+          const j = Math.floor(Math.random() * (k + 1));
+          [arr[k], arr[j]] = [arr[j], arr[k]];
+        }
+        return {
+          choices: arr.map(v => `${v} ${unit}`),
+          targetChoice: `${correctVal} ${unit}`
+        };
+      }
+
+      static generate(levelIdx) {
+        switch (levelIdx) {
+          // SINGLE SHAPES (Q1 to Q7)
+          case 0: return this.genRectangleArea();
+          case 1: return this.genTriangleArea();
+          case 2: return this.genParallelogramArea();
+          case 3: return this.genRectanglePerimeter();
+          case 4: return this.genTrianglePerimeter();
+          case 5: return this.genParallelogramPerimeter();
+          case 6: return this.genRightTriangleArea();
+
+          // COMPOSITE SHAPES (Q8 to Q15) - LAST 8 QUESTIONS!
+          case 7: return this.genCompositeLShapeArea();
+          case 8: return this.genCompositeHouseArea();
+          case 9: return this.genCompositeRectTriangleArea();
+          case 10: return this.genCompositeHousePerimeter();
+          case 11: return this.genCompositeRectCutoutArea();
+          case 12: return this.genCompositeRectParallelogramArea();
+          case 13: return this.genCompositeDoubleTriangleRectArea();
+          case 14: return this.genCompositeTripleGrandArea();
+
+          default: return this.genRectangleArea();
+        }
+      }
+
+      // Q1: Rectangle Area
+      static genRectangleArea() {
+        const w = this.rand(4, 12);
+        const h = this.rand(3, 10);
+        const A = w * h;
+        const P = 2 * (w + h);
+        const c = this.buildChoices(A, "cm²", [P, w * h + 6, (w + 2) * h, w + h]);
+        return {
+          prompt: "Find the AREA of the rectangle.",
+          shapeType: "rectangle",
+          params: { w, h, unit: "cm" },
+          targetValue: A,
+          targetChoice: c.targetChoice,
+          choices: c.choices
+        };
+      }
+
+      // Q2: Triangle Area
+      static genTriangleArea() {
+        const b = 2 * this.rand(3, 8); // even number
+        const h = this.rand(4, 12);
+        const A = 0.5 * b * h;
+        const c = this.buildChoices(A, "m²", [b * h, A + 6, A - 4, b + h + 8]);
+        return {
+          prompt: "Find the AREA of the triangle.",
+          shapeType: "triangle",
+          params: { b, h, apexX: b / 2, unit: "m" },
+          targetValue: A,
+          targetChoice: c.targetChoice,
+          choices: c.choices
+        };
+      }
+
+      // Q3: Parallelogram Area
+      static genParallelogramArea() {
+        const b = this.rand(6, 14);
+        const h = this.rand(4, 10);
+        const s = h + this.rand(2, 5); // slant side (distractor for area!)
+        const A = b * h;
+        const c = this.buildChoices(A, "cm²", [b * s, 2 * b + 2 * s, A + 10, b * (h + 2)]);
+        return {
+          prompt: "Find the AREA of the parallelogram.",
+          shapeType: "parallelogram",
+          params: { b, h, s, dx: 4, unit: "cm" },
+          targetValue: A,
+          targetChoice: c.targetChoice,
+          choices: c.choices
+        };
+      }
+
+      // Q4: Rectangle Perimeter
+      static genRectanglePerimeter() {
+        const L = this.rand(8, 18);
+        const W = this.rand(4, 12);
+        const P = 2 * (L + W);
+        const A = L * W;
+        const c = this.buildChoices(P, "m", [A, L + W, P + 8, 2 * L + W]);
+        return {
+          prompt: "Find the PERIMETER of the rectangle.",
+          shapeType: "rectangle",
+          params: { w: L, h: W, unit: "m" },
+          targetValue: P,
+          targetChoice: c.targetChoice,
+          choices: c.choices
+        };
+      }
+
+      // Q5: Triangle Perimeter
+      static genTrianglePerimeter() {
+        const tris = [[6, 8, 10], [5, 12, 13], [7, 10, 12], [9, 12, 15], [8, 15, 17], [10, 14, 18]];
+        const tri = tris[this.rand(0, tris.length - 1)];
+        const [a, b, cSide] = tri;
+        const P = a + b + cSide;
+        const c = this.buildChoices(P, "cm", [a + b, 0.5 * a * b, P + 6, P - 4]);
+        return {
+          prompt: "Find the PERIMETER of the triangle.",
+          shapeType: "triangle_3sides",
+          params: { a, b, c: cSide, unit: "cm" },
+          targetValue: P,
+          targetChoice: c.targetChoice,
+          choices: c.choices
+        };
+      }
+
+      // Q6: Parallelogram Perimeter
+      static genParallelogramPerimeter() {
+        const a = this.rand(8, 16);
+        const b = this.rand(5, 12);
+        const h = this.rand(4, b - 1);
+        const P = 2 * (a + b);
+        const c = this.buildChoices(P, "m", [a * h, a + b + h, 2 * a + b, P + 10]);
+        return {
+          prompt: "Find the PERIMETER of the parallelogram.",
+          shapeType: "parallelogram",
+          params: { b: a, s: b, h, dx: 3, unit: "m" },
+          targetValue: P,
+          targetChoice: c.targetChoice,
+          choices: c.choices
+        };
+      }
+
+      // Q7: Right Triangle Area
+      static genRightTriangleArea() {
+        const tris = [[6, 8, 10], [8, 15, 17], [5, 12, 13], [9, 12, 15], [12, 16, 20]];
+        const tri = tris[this.rand(0, tris.length - 1)];
+        const [a, b, cSide] = tri;
+        const A = 0.5 * a * b;
+        const P = a + b + cSide;
+        const c = this.buildChoices(A, "cm²", [a * b, P, A + 12, A - 6]);
+        return {
+          prompt: "Find the AREA of the right triangle.",
+          shapeType: "right_triangle",
+          params: { a, b, c: cSide, unit: "cm" },
+          targetValue: A,
+          targetChoice: c.targetChoice,
+          choices: c.choices
+        };
+      }
+
+      // Q8 (Composite 1): L-Shaped Region (Two Rectangles)
+      static genCompositeLShapeArea() {
+        const W = this.rand(10, 16);
+        const H = this.rand(8, 14);
+        const w1 = this.rand(4, W - 4);
+        const h1 = this.rand(3, H - 3);
+        const w2 = W - w1;
+        const h2 = H - h1;
+        const A = (w1 * H) + (w2 * h2);
+        const c = this.buildChoices(A, "cm²", [W * H, w1 * h1 + w2 * H, A + 14, A - 10]);
+        return {
+          prompt: "Find the TOTAL AREA of the composite L-shaped figure.",
+          shapeType: "composite_L",
+          params: { W, H, w1, h1, w2, h2, unit: "cm" },
+          targetValue: A,
+          targetChoice: c.targetChoice,
+          choices: c.choices
+        };
+      }
+
+      // Q9 (Composite 2): House Shape Area (Rectangle + Triangle Roof)
+      static genCompositeHouseArea() {
+        const w = 2 * this.rand(4, 8); // even base
+        const h1 = this.rand(5, 10);
+        const h2 = this.rand(4, 8);
+        const A = (w * h1) + (0.5 * w * h2);
+        const c = this.buildChoices(A, "m²", [w * h1 + w * h2, w * (h1 + h2), A + 12, A - 10]);
+        return {
+          prompt: "Find the TOTAL AREA of the composite house shape.",
+          shapeType: "composite_house",
+          params: { w, h1, h2, mode: "area", unit: "m" },
+          targetValue: A,
+          targetChoice: c.targetChoice,
+          choices: c.choices
+        };
+      }
+
+      // Q10 (Composite 3): Rectangle + Right Triangle Area
+      static genCompositeRectTriangleArea() {
+        const w = this.rand(6, 12);
+        const h = 2 * this.rand(3, 6);
+        const b = this.rand(4, 10);
+        const A = (w * h) + (0.5 * b * h);
+        const c = this.buildChoices(A, "cm²", [w * h + b * h, (w + b) * h, A + 12, A - 10]);
+        return {
+          prompt: "Find the TOTAL AREA of the composite figure.",
+          shapeType: "composite_rect_triangle",
+          params: { w, h, b, unit: "cm" },
+          targetValue: A,
+          targetChoice: c.targetChoice,
+          choices: c.choices
+        };
+      }
+
+      // Q11 (Composite 4): House Shape Perimeter
+      static genCompositeHousePerimeter() {
+        const w = this.rand(8, 16);
+        const h1 = this.rand(6, 12);
+        const s = this.rand(7, 14);
+        const P = w + 2 * h1 + 2 * s; // Outer boundary perimeter
+        const c = this.buildChoices(P, "m", [w + h1 + s, 2 * w + 2 * h1 + 2 * s, P + 8, P - 6]);
+        return {
+          prompt: "Find the PERIMETER of the composite shape (outer boundary).",
+          shapeType: "composite_house",
+          params: { w, h1, s, mode: "perimeter", unit: "m" },
+          targetValue: P,
+          targetChoice: c.targetChoice,
+          choices: c.choices
+        };
+      }
+
+      // Q12 (Composite 5): Subtractive Area (Rectangle with Triangle Cutout)
+      static genCompositeRectCutoutArea() {
+        const W = this.rand(12, 18);
+        const H = this.rand(8, 14);
+        const b = 2 * this.rand(3, 5); // b < W
+        const h = this.rand(3, H - 2);
+        const A = (W * H) - (0.5 * b * h);
+        const c = this.buildChoices(A, "cm²", [W * H + 0.5 * b * h, W * H - b * h, W * H, A - 12]);
+        return {
+          prompt: "Find the SHADED AREA of the figure (Rectangle minus Triangle cutout).",
+          shapeType: "composite_rect_cutout",
+          params: { W, H, b, h, unit: "cm" },
+          targetValue: A,
+          targetChoice: c.targetChoice,
+          choices: c.choices
+        };
+      }
+
+      // Q13 (Composite 6): Rectangle + Parallelogram Area
+      static genCompositeRectParallelogramArea() {
+        const w1 = this.rand(6, 12);
+        const w2 = this.rand(5, 10);
+        const h = this.rand(4, 9);
+        const A = (w1 * h) + (w2 * h);
+        const c = this.buildChoices(A, "m²", [(w1 + w2) * h + 10, w1 * h, w2 * h, A + 15]);
+        return {
+          prompt: "Find the TOTAL AREA of the composite figure.",
+          shapeType: "composite_rect_parallelogram",
+          params: { w1, w2, h, dx: 3, unit: "m" },
+          targetValue: A,
+          targetChoice: c.targetChoice,
+          choices: c.choices
+        };
+      }
+
+      // Q14 (Composite 7): Double Triangle + Rectangle Area
+      static genCompositeDoubleTriangleRectArea() {
+        const b1 = this.rand(3, 8);
+        const w = this.rand(8, 14);
+        const b2 = this.rand(3, 8);
+        const h = 2 * this.rand(2, 6);
+        const A = (0.5 * b1 * h) + (w * h) + (0.5 * b2 * h);
+        const c = this.buildChoices(A, "cm²", [(b1 + w + b2) * h, A + 16, A - 12, w * h]);
+        return {
+          prompt: "Find the TOTAL AREA of the combined figure.",
+          shapeType: "composite_double_triangle_rect",
+          params: { b1, w, b2, h, unit: "cm" },
+          targetValue: A,
+          targetChoice: c.targetChoice,
+          choices: c.choices
+        };
+      }
+
+      // Q15 (Composite 8 / $1,000,000 FINALE): Triangle + Rectangle + Parallelogram Area
+      static genCompositeTripleGrandArea() {
+        const b1 = 2 * this.rand(2, 5); // triangle base
+        const w = this.rand(8, 14);     // rectangle width
+        const b2 = this.rand(6, 12);    // parallelogram base
+        const h = this.rand(6, 12);     // height
+        const A = (0.5 * b1 * h) + (w * h) + (b2 * h);
+        const c = this.buildChoices(A, "m²", [(b1 + w + b2) * h, A + 20, A - 15, (w + b2) * h]);
+        return {
+          prompt: "Find the TOTAL AREA of this complex composite figure.",
+          shapeType: "composite_triple_grand",
+          params: { b1, w, b2, h, dx: 3, unit: "m" },
+          targetValue: A,
+          targetChoice: c.targetChoice,
+          choices: c.choices
+        };
+      }
+    }
+  </script>
+
+  <!-- GEOMETRY CANVAS RENDERER -->
+  <script>
+    class GeometryCanvasRenderer {
+      constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.resize();
+
+        window.addEventListener('resize', () => {
+          this.resize();
+          if (this.currentProblem) this.draw(this.currentProblem);
+        });
+      }
+
+      resize() {
+        const rect = this.canvas.parentElement.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        this.canvas.width = rect.width * dpr;
+        this.canvas.height = rect.height * dpr;
+        this.ctx.scale(dpr, dpr);
+        this.width = rect.width;
+        this.height = rect.height;
+      }
+
+      getTransform(minX, maxX, minY, maxY, padding = 55) {
+        const modelW = Math.max(maxX - minX, 1);
+        const modelH = Math.max(maxY - minY, 1);
+        const availW = this.width - padding * 2;
+        const availH = this.height - padding * 2;
+        const scale = Math.min(availW / modelW, availH / modelH);
+
+        const modelCenterX = (minX + maxX) / 2;
+        const modelCenterY = (minY + maxY) / 2;
+        const canvasCenterX = this.width / 2;
+        const canvasCenterY = this.height / 2;
+
+        return (mx, my) => ({
+          x: canvasCenterX + (mx - modelCenterX) * scale,
+          y: canvasCenterY - (my - modelCenterY) * scale
+        });
+      }
+
+      drawBadge(text, x, y, isHighlight = false) {
+        const ctx = this.ctx;
+        ctx.font = '800 13px "JetBrains Mono", sans-serif';
+        const metrics = ctx.measureText(text);
+        const pw = metrics.width + 12;
+        const ph = 22;
+
+        ctx.fillStyle = isHighlight ? 'rgba(234, 179, 8, 0.95)' : 'rgba(15, 23, 42, 0.92)';
+        ctx.beginPath();
+        ctx.roundRect(x - pw / 2, y - ph / 2, pw, ph, 6);
+        ctx.fill();
+
+        ctx.strokeStyle = isHighlight ? '#ffffff' : '#38bdf8';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.fillStyle = isHighlight ? '#000000' : '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, x, y + 1);
+      }
+
+      drawRightAngleMarker(pCorner, p1, p2, size = 10) {
+        const ctx = this.ctx;
+        const u1 = { x: (p1.x - pCorner.x), y: (p1.y - pCorner.y) };
+        const u2 = { x: (p2.x - pCorner.x), y: (p2.y - pCorner.y) };
+        const len1 = Math.hypot(u1.x, u1.y) || 1;
+        const len2 = Math.hypot(u2.x, u2.y) || 1;
+        
+        u1.x = (u1.x / len1) * size;
+        u1.y = (u1.y / len1) * size;
+        u2.x = (u2.x / len2) * size;
+        u2.y = (u2.y / len2) * size;
+
+        ctx.strokeStyle = '#facc15';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(pCorner.x + u1.x, pCorner.y + u1.y);
+        ctx.lineTo(pCorner.x + u1.x + u2.x, pCorner.y + u1.y + u2.y);
+        ctx.lineTo(pCorner.x + u2.x, pCorner.y + u2.y);
+        ctx.stroke();
+      }
+
+      draw(problem) {
+        this.currentProblem = problem;
+        const ctx = this.ctx;
+        ctx.clearRect(0, 0, this.width, this.height);
+
+        const type = problem.shapeType;
+        const p = problem.params;
+
+        switch (type) {
+          case 'rectangle': this.drawRectangle(p); break;
+          case 'triangle': this.drawTriangle(p); break;
+          case 'parallelogram': this.drawParallelogram(p); break;
+          case 'triangle_3sides': this.drawTriangle3Sides(p); break;
+          case 'right_triangle': this.drawRightTriangle(p); break;
+
+          // COMPOSITE SHAPES
+          case 'composite_L': this.drawCompositeL(p); break;
+          case 'composite_house': this.drawCompositeHouse(p); break;
+          case 'composite_rect_triangle': this.drawCompositeRectTriangle(p); break;
+          case 'composite_rect_cutout': this.drawCompositeRectCutout(p); break;
+          case 'composite_rect_parallelogram': this.drawCompositeRectParallelogram(p); break;
+          case 'composite_double_triangle_rect': this.drawCompositeDoubleTriangleRect(p); break;
+          case 'composite_triple_grand': this.drawCompositeTripleGrand(p); break;
+        }
+      }
+
+      // --- SINGLE SHAPE DRAWING METHODS ---
+      drawRectangle(p) {
+        const ctx = this.ctx;
+        const tf = this.getTransform(0, p.w, 0, p.h);
+
+        const p0 = tf(0, 0), p1 = tf(p.w, 0), p2 = tf(p.w, p.h), p3 = tf(0, p.h);
+
+        ctx.fillStyle = 'rgba(30, 58, 138, 0.45)';
+        ctx.strokeStyle = '#60a5fa';
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.lineTo(p3.x, p3.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        this.drawRightAngleMarker(p0, p1, p3);
+
+        this.drawBadge(`${p.w} ${p.unit}`, (p0.x + p1.x) / 2, p0.y + 22);
+        this.drawBadge(`${p.h} ${p.unit}`, p0.x - 28, (p0.y + p3.y) / 2);
+      }
+
+      drawTriangle(p) {
+        const ctx = this.ctx;
+        const tf = this.getTransform(0, p.b, 0, p.h);
+
+        const p0 = tf(0, 0), p1 = tf(p.b, 0), pApex = tf(p.apexX, p.h), pBaseH = tf(p.apexX, 0);
+
+        ctx.fillStyle = 'rgba(30, 58, 138, 0.45)';
+        ctx.strokeStyle = '#60a5fa';
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p1.x, p1.y);
+        ctx.lineTo(pApex.x, pApex.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Dashed Height Line
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.moveTo(pApex.x, pApex.y);
+        ctx.lineTo(pBaseH.x, pBaseH.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        this.drawRightAngleMarker(pBaseH, p1, pApex);
+
+        this.drawBadge(`${p.b} ${p.unit}`, (p0.x + p1.x) / 2, p0.y + 22);
+        this.drawBadge(`${p.h} ${p.unit}`, pApex.x + 24, (pApex.y + pBaseH.y) / 2, true);
+      }
+
+      drawParallelogram(p) {
+        const ctx = this.ctx;
+        const tf = this.getTransform(0, p.b + p.dx, 0, p.h);
+
+        const p0 = tf(0, 0), p1 = tf(p.b, 0), p2 = tf(p.b + p.dx, p.h), p3 = tf(p.dx, p.h), pH = tf(p.dx, 0);
+
+        ctx.fillStyle = 'rgba(30, 58, 138, 0.45)';
+        ctx.strokeStyle = '#60a5fa';
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.lineTo(p3.x, p3.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Height line
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.moveTo(p3.x, p3.y);
+        ctx.lineTo(pH.x, pH.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        this.drawRightAngleMarker(pH, p1, p3);
+
+        this.drawBadge(`${p.b} ${p.unit}`, (p0.x + p1.x) / 2, p0.y + 22);
+        this.drawBadge(`h = ${p.h} ${p.unit}`, pH.x - 28, (p3.y + pH.y) / 2, true);
+        if (p.s) {
+          this.drawBadge(`${p.s} ${p.unit}`, (p1.x + p2.x) / 2 + 24, (p1.y + p2.y) / 2);
+        }
+      }
+
+      drawTriangle3Sides(p) {
+        const ctx = this.ctx;
+        const tf = this.getTransform(0, p.c, 0, p.a);
+        const p0 = tf(0, 0), p1 = tf(p.c, 0), pApex = tf(p.a * 0.4, p.a * 0.8);
+
+        ctx.fillStyle = 'rgba(30, 58, 138, 0.45)';
+        ctx.strokeStyle = '#60a5fa';
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p1.x, p1.y);
+        ctx.lineTo(pApex.x, pApex.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        this.drawBadge(`${p.c} ${p.unit}`, (p0.x + p1.x) / 2, p0.y + 22);
+        this.drawBadge(`${p.a} ${p.unit}`, (p0.x + pApex.x) / 2 - 24, (p0.y + pApex.y) / 2);
+        this.drawBadge(`${p.b} ${p.unit}`, (p1.x + pApex.x) / 2 + 24, (p1.y + pApex.y) / 2);
+      }
+
+      drawRightTriangle(p) {
+        const ctx = this.ctx;
+        const tf = this.getTransform(0, p.b, 0, p.a);
+        const p0 = tf(0, 0), p1 = tf(p.b, 0), p2 = tf(0, p.a);
+
+        ctx.fillStyle = 'rgba(30, 58, 138, 0.45)';
+        ctx.strokeStyle = '#60a5fa';
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        this.drawRightAngleMarker(p0, p1, p2);
+
+        this.drawBadge(`${p.b} ${p.unit}`, (p0.x + p1.x) / 2, p0.y + 22);
+        this.drawBadge(`${p.a} ${p.unit}`, p0.x - 28, (p0.y + p2.y) / 2);
+        this.drawBadge(`${p.c} ${p.unit}`, (p1.x + p2.x) / 2 + 22, (p1.y + p2.y) / 2);
+      }
+
+      // --- COMPOSITE SHAPE DRAWING METHODS ---
+      drawCompositeL(p) {
+        const ctx = this.ctx;
+        const tf = this.getTransform(0, p.W, 0, p.H);
+
+        const p0 = tf(0, 0), p1 = tf(p.W, 0), p2 = tf(p.W, p.h2), p3 = tf(p.w1, p.h2), p4 = tf(p.w1, p.H), p5 = tf(0, p.H);
+
+        ctx.fillStyle = 'rgba(30, 58, 138, 0.45)';
+        ctx.strokeStyle = '#60a5fa';
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.lineTo(p3.x, p3.y);
+        ctx.lineTo(p4.x, p4.y);
+        ctx.lineTo(p5.x, p5.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Internal division dashed line
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = '#facc15';
+        ctx.beginPath();
+        ctx.moveTo(p3.x, p3.y);
+        ctx.lineTo(p0.x, p3.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        this.drawBadge(`${p.W} ${p.unit}`, (p0.x + p1.x) / 2, p0.y + 22);
+        this.drawBadge(`${p.H} ${p.unit}`, p0.x - 28, (p0.y + p5.y) / 2);
+        this.drawBadge(`${p.w1} ${p.unit}`, (p5.x + p4.x) / 2, p5.y - 22);
+        this.drawBadge(`${p.h1} ${p.unit}`, p4.x + 24, (p4.y + p3.y) / 2);
+      }
+
+      drawCompositeHouse(p) {
+        const ctx = this.ctx;
+        const tf = this.getTransform(0, p.w, 0, p.h1 + (p.h2 || p.s));
+
+        const p0 = tf(0, 0), p1 = tf(p.w, 0), p2 = tf(p.w, p.h1), p3 = tf(p.w / 2, p.h1 + (p.h2 || p.s * 0.8)), p4 = tf(0, p.h1);
+
+        ctx.fillStyle = 'rgba(30, 58, 138, 0.45)';
+        ctx.strokeStyle = '#60a5fa';
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.lineTo(p3.x, p3.y);
+        ctx.lineTo(p4.x, p4.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Internal line separating roof from rectangle
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = '#38bdf8';
+        ctx.beginPath();
+        ctx.moveTo(p4.x, p4.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+
+        if (p.h2) {
+          const pRoofBase = tf(p.w / 2, p.h1);
+          ctx.strokeStyle = '#f59e0b';
+          ctx.beginPath();
+          ctx.moveTo(pRoofBase.x, pRoofBase.y);
+          ctx.lineTo(p3.x, p3.y);
+          ctx.stroke();
+          this.drawRightAngleMarker(pRoofBase, p2, p3);
+          this.drawBadge(`h = ${p.h2} ${p.unit}`, p3.x + 28, (pRoofBase.y + p3.y) / 2, true);
+        }
+        ctx.setLineDash([]);
+
+        this.drawBadge(`${p.w} ${p.unit}`, (p0.x + p1.x) / 2, p0.y + 22);
+        this.drawBadge(`${p.h1} ${p.unit}`, p0.x - 28, (p0.y + p4.y) / 2);
+        if (p.s) {
+          this.drawBadge(`${p.s} ${p.unit}`, (p4.x + p3.x) / 2 - 22, (p4.y + p3.y) / 2);
+          this.drawBadge(`${p.s} ${p.unit}`, (p2.x + p3.x) / 2 + 22, (p2.y + p3.y) / 2);
+        }
+      }
+
+      drawCompositeRectTriangle(p) {
+        const ctx = this.ctx;
+        const tf = this.getTransform(0, p.w + p.b, 0, p.h);
+
+        const p0 = tf(0, 0), p1 = tf(p.w, 0), p2 = tf(p.w + p.b, 0), p3 = tf(p.w, p.h), p4 = tf(0, p.h);
+
+        ctx.fillStyle = 'rgba(30, 58, 138, 0.45)';
+        ctx.strokeStyle = '#60a5fa';
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.lineTo(p3.x, p3.y);
+        ctx.lineTo(p4.x, p4.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Dashed internal boundary
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = '#facc15';
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p3.x, p3.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        this.drawRightAngleMarker(p1, p2, p3);
+
+        this.drawBadge(`Rect Base: ${p.w} ${p.unit}`, (p0.x + p1.x) / 2, p0.y + 22);
+        this.drawBadge(`Tri Base: ${p.b} ${p.unit}`, (p1.x + p2.x) / 2, p1.y + 22);
+        this.drawBadge(`Height: ${p.h} ${p.unit}`, p0.x - 30, (p0.y + p4.y) / 2, true);
+      }
+
+      drawCompositeRectCutout(p) {
+        const ctx = this.ctx;
+        const tf = this.getTransform(0, p.W, 0, p.H);
+
+        const cutoutX1 = p.W * 0.25;
+        const cutoutX2 = cutoutX1 + p.b;
+
+        const p0 = tf(0, 0), p1 = tf(p.W, 0), p2 = tf(p.W, p.H), pC2 = tf(cutoutX2, p.H), pApex = tf(cutoutX1 + p.b / 2, p.H - p.h), pC1 = tf(cutoutX1, p.H), p3 = tf(0, p.H);
+
+        ctx.fillStyle = 'rgba(30, 58, 138, 0.45)';
+        ctx.strokeStyle = '#60a5fa';
+        ctx.lineWidth = 3;
+
+        // Draw main shape minus cutout
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.lineTo(pC2.x, pC2.y);
+        ctx.lineTo(pApex.x, pApex.y);
+        ctx.lineTo(pC1.x, pC1.y);
+        ctx.lineTo(p3.x, p3.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Draw cutout hatching/dashed top
+        ctx.setLineDash([4, 4]);
+        ctx.strokeStyle = '#f87171';
+        ctx.beginPath();
+        ctx.moveTo(pC1.x, pC1.y);
+        ctx.lineTo(pC2.x, pC2.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        this.drawBadge(`Rect ${p.W} ${p.unit}`, (p0.x + p1.x) / 2, p0.y + 22);
+        this.drawBadge(`Rect ${p.H} ${p.unit}`, p0.x - 28, (p0.y + p3.y) / 2);
+        this.drawBadge(`Cutout b = ${p.b} ${p.unit}`, (pC1.x + pC2.x) / 2, pC1.y - 20, true);
+        this.drawBadge(`Cutout h = ${p.h} ${p.unit}`, pApex.x + 32, (pApex.y + pC1.y) / 2, true);
+      }
+
+      drawCompositeRectParallelogram(p) {
+        const ctx = this.ctx;
+        const tf = this.getTransform(0, p.w1 + p.w2 + p.dx, 0, p.h);
+
+        const p0 = tf(0, 0), p1 = tf(p.w1, 0), p2 = tf(p.w1 + p.w2, 0), p3 = tf(p.w1 + p.w2 + p.dx, p.h), p4 = tf(p.w1 + p.dx, p.h), p5 = tf(p.w1, p.h), p6 = tf(0, p.h);
+
+        ctx.fillStyle = 'rgba(30, 58, 138, 0.45)';
+        ctx.strokeStyle = '#60a5fa';
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.lineTo(p3.x, p3.y);
+        ctx.lineTo(p6.x, p6.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Internal divider
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = '#facc15';
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p5.x, p5.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        this.drawBadge(`Rectangle: ${p.w1} ${p.unit}`, (p0.x + p1.x) / 2, p0.y + 22);
+        this.drawBadge(`Parallelogram: ${p.w2} ${p.unit}`, (p1.x + p2.x) / 2, p1.y + 22);
+        this.drawBadge(`Height: ${p.h} ${p.unit}`, p0.x - 28, (p0.y + p6.y) / 2, true);
+      }
+
+      drawCompositeDoubleTriangleRect(p) {
+        const ctx = this.ctx;
+        const tf = this.getTransform(0, p.b1 + p.w + p.b2, 0, p.h);
+
+        const p0 = tf(0, 0), p1 = tf(p.b1, 0), p2 = tf(p.b1 + p.w, 0), p3 = tf(p.b1 + p.w + p.b2, 0), p4 = tf(p.b1 + p.w, p.h), p5 = tf(p.b1, p.h);
+
+        ctx.fillStyle = 'rgba(30, 58, 138, 0.45)';
+        ctx.strokeStyle = '#60a5fa';
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p3.x, p3.y);
+        ctx.lineTo(p4.x, p4.y);
+        ctx.lineTo(p5.x, p5.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Dashed dividers
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = '#38bdf8';
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p5.x, p5.y);
+        ctx.moveTo(p2.x, p2.y);
+        ctx.lineTo(p4.x, p4.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        this.drawBadge(`Tri1: ${p.b1} ${p.unit}`, (p0.x + p1.x) / 2, p0.y + 22);
+        this.drawBadge(`Rect: ${p.w} ${p.unit}`, (p1.x + p2.x) / 2, p1.y + 22);
+        this.drawBadge(`Tri2: ${p.b2} ${p.unit}`, (p2.x + p3.x) / 2, p2.y + 22);
+        this.drawBadge(`Height: ${p.h} ${p.unit}`, p5.x - 28, (p1.y + p5.y) / 2, true);
+      }
+
+      drawCompositeTripleGrand(p) {
+        const ctx = this.ctx;
+        const tf = this.getTransform(0, p.b1 + p.w + p.b2 + p.dx, 0, p.h);
+
+        const p0 = tf(0, 0), p1 = tf(p.b1, 0), p2 = tf(p.b1 + p.w, 0), p3 = tf(p.b1 + p.w + p.b2, 0), p4 = tf(p.b1 + p.w + p.b2 + p.dx, p.h), p5 = tf(p.b1 + p.w + p.dx, p.h), p6 = tf(p.b1, p.h);
+
+        ctx.fillStyle = 'rgba(30, 58, 138, 0.45)';
+        ctx.strokeStyle = '#60a5fa';
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p3.x, p3.y);
+        ctx.lineTo(p4.x, p4.y);
+        ctx.lineTo(p6.x, p6.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Dashed section dividers
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = '#facc15';
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p6.x, p6.y);
+        ctx.moveTo(p2.x, p2.y);
+        ctx.lineTo(p5.x, p5.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        this.drawBadge(`Tri: ${p.b1}${p.unit}`, (p0.x + p1.x) / 2, p0.y + 22);
+        this.drawBadge(`Rect: ${p.w}${p.unit}`, (p1.x + p2.x) / 2, p1.y + 22);
+        this.drawBadge(`Para: ${p.b2}${p.unit}`, (p2.x + p3.x) / 2, p2.y + 22);
+        this.drawBadge(`Height: ${p.h}${p.unit}`, p6.x - 28, (p1.y + p6.y) / 2, true);
+      }
+    }
+  </script>
+
+  <!-- FIREWORKS ENGINE -->
+  <script>
+    class FireworksEngine {
+      constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.running = false;
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+      }
+
+      resize() {
+        if (!this.canvas) return;
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      }
+
+      start() {
+        this.running = true;
+        this.particles = [];
+        this.resize();
+        this.loop();
+      }
+
+      stop() {
+        this.running = false;
+        this.particles = [];
+      }
+
+      createBurst(x, y) {
+        const count = 50;
+        const colors = ['#facc15', '#38bdf8', '#4ade80', '#f43f5e', '#a855f7'];
+        for (let i = 0; i < count; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 6 + 2;
+          this.particles.push({
+            x, y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            alpha: 1,
+            size: Math.random() * 3 + 2
+          });
+        }
+      }
+
+      loop() {
+        if (!this.running) return;
+        this.ctx.globalCompositeOperation = 'destination-out';
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.globalCompositeOperation = 'lighter';
+
+        if (Math.random() < 0.12) {
+          this.createBurst(
+            Math.random() * this.canvas.width,
+            Math.random() * (this.canvas.height * 0.6)
+          );
+        }
+
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const p = this.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.08;
+          p.alpha -= 0.015;
+
+          if (p.alpha <= 0) {
+            this.particles.splice(i, 1);
+            continue;
+          }
+
+          this.ctx.fillStyle = p.color;
+          this.ctx.globalAlpha = p.alpha;
+          this.ctx.beginPath();
+          this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          this.ctx.fill();
+        }
+
+        requestAnimationFrame(() => this.loop());
+      }
+    }
+  </script>
+
+  <!-- MAIN GAME LOGIC -->
+  <script>
+    class MillionaireGame {
+      constructor() {
+        this.currentLevel = 0;
+        this.currentQuestion = null;
+        this.selectedOptionIdx = null;
+        this.lastClickIdx = null;
+        this.lastClickTime = 0;
+        this.isLocked = false;
+
+        this.lifelines = { fiftyFifty: false, audience: false, phone: false };
+
+        this.renderer = new GeometryCanvasRenderer('geometryCanvas');
+        this.fireworks = new FireworksEngine('fireworksCanvas');
+
+        this.initLeaderboard();
+        this.initDOM();
+        this.initEvents();
+        this.renderPrizeLadder();
+        this.loadQuestion(0);
+      }
+
+      initLeaderboard() {
+        const stored = localStorage.getItem('geomillionaire_leaderboard');
+        if (!stored) {
+          const defaultEntries = [
+            { name: "Hermione Granger", prize: "$500,000", amount: 500000, date: "May 14, 2024" },
+            { name: "Albert Einstein", prize: "$500,000", amount: 500000, date: "Jan 10, 2025" },
+            { name: "Ada Lovelace", prize: "$250,000", amount: 250000, date: "Feb 18, 2025" },
+            { name: "Isaac Newton", prize: "$125,000", amount: 125000, date: "Nov 05, 2025" },
+            { name: "Pythagoras", prize: "$64,000", amount: 64000, date: "Aug 22, 2025" },
+            { name: "Euclid", prize: "$32,000", amount: 32000, date: "Dec 12, 2025" }
+          ];
+          localStorage.setItem('geomillionaire_leaderboard', JSON.stringify(defaultEntries));
+        }
+      }
+
+      getLeaderboard() {
+        return JSON.parse(localStorage.getItem('geomillionaire_leaderboard')) || [];
+      }
+
+      addLeaderboardEntry(name, levelIdx) {
+        const entries = this.getLeaderboard();
+        const tier = PRIZE_TIERS[levelIdx] || { formatted: "$0", amount: 0 };
+        const today = new Date();
+        const formattedDate = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+        entries.push({
+          name: name.trim() || "Anonymous Player",
+          prize: tier.formatted,
+          amount: tier.amount,
+          date: formattedDate
+        });
+
+        entries.sort((a, b) => b.amount - a.amount);
+        localStorage.setItem('geomillionaire_leaderboard', JSON.stringify(entries.slice(0, 10)));
+        this.renderLeaderboardTable();
+      }
+
+      renderLeaderboardTable() {
+        const body = document.getElementById('leaderboardTableBody');
+        if (!body) return;
+        body.innerHTML = '';
+
+        const entries = this.getLeaderboard();
+        entries.forEach((item, idx) => {
+          const row = document.createElement('tr');
+          row.className = idx === 0 ? "bg-amber-500/10 font-bold" : "";
+          row.innerHTML = `
+            <td class="p-2 text-amber-400 font-bold">${idx + 1}</td>
+            <td class="p-2 text-white">${item.name}</td>
+            <td class="p-2 text-right text-amber-400 font-bold">${item.prize}</td>
+            <td class="p-2 text-right text-slate-400 text-[10px]">${item.date}</td>
+          `;
+          body.appendChild(row);
+        });
+      }
+
+      initDOM() {
+        this.screenHome = document.getElementById('screenHome');
+        this.prizeLadderContainer = document.getElementById('prizeLadderContainer');
+        this.textQuestionPrompt = document.getElementById('textQuestionPrompt');
+        this.btnLockIn = document.getElementById('btnLockIn');
+
+        this.btnOptions = [
+          { btn: document.getElementById('btnOptionA'), text: document.getElementById('textOptionA') },
+          { btn: document.getElementById('btnOptionB'), text: document.getElementById('textOptionB') },
+          { btn: document.getElementById('btnOptionC'), text: document.getElementById('textOptionC') },
+          { btn: document.getElementById('btnOptionD'), text: document.getElementById('textOptionD') }
+        ];
+
+        this.btn5050 = document.getElementById('btnLifeline5050');
+        this.btnAudience = document.getElementById('btnLifelineAudience');
+        this.btnPhone = document.getElementById('btnLifelinePhone');
+
+        this.modalAudience = document.getElementById('modalAudience');
+        this.modalPhone = document.getElementById('modalPhone');
+        this.modalGameOver = document.getElementById('modalGameOver');
+        this.modalWin = document.getElementById('modalWin');
+        this.modalRules = document.getElementById('modalRules');
+        this.modalLeaderboard = document.getElementById('modalLeaderboard');
+      }
+
+      initEvents() {
+        document.getElementById('btnStartGame').addEventListener('click', () => {
+          this.screenHome.classList.add('hidden');
+        });
+        document.getElementById('btnHomeRules').addEventListener('click', () => this.modalRules.classList.remove('hidden'));
+        document.getElementById('btnHomeLeaderboard').addEventListener('click', () => {
+          this.renderLeaderboardTable();
+          this.modalLeaderboard.classList.remove('hidden');
+        });
+
+        document.getElementById('btnHeaderHome').addEventListener('click', () => this.screenHome.classList.remove('hidden'));
+        document.getElementById('btnHeaderLeaderboard').addEventListener('click', () => {
+          this.renderLeaderboardTable();
+          this.modalLeaderboard.classList.remove('hidden');
+        });
+
+        this.btnOptions.forEach((opt, idx) => {
+          opt.btn.addEventListener('click', () => this.handleOptionClick(idx));
+        });
+
+        this.btnLockIn.addEventListener('click', () => {
+          if (this.selectedOptionIdx !== null && !this.isLocked) {
+            this.lockInAnswer(this.selectedOptionIdx);
+          }
+        });
+
+        this.btn5050.addEventListener('click', () => this.use5050());
+        this.btnAudience.addEventListener('click', () => this.useAudience());
+        this.btnPhone.addEventListener('click', () => this.usePhone());
+
+        document.getElementById('btnCloseAudience').addEventListener('click', () => this.modalAudience.classList.add('hidden'));
+        document.getElementById('btnOKAudience').addEventListener('click', () => this.modalAudience.classList.add('hidden'));
+        document.getElementById('btnOKPhone').addEventListener('click', () => this.modalPhone.classList.add('hidden'));
+        document.getElementById('btnCloseRules').addEventListener('click', () => this.modalRules.classList.add('hidden'));
+        document.getElementById('btnOKRules').addEventListener('click', () => this.modalRules.classList.add('hidden'));
+        document.getElementById('btnCloseLeaderboard').addEventListener('click', () => this.modalLeaderboard.classList.add('hidden'));
+        document.getElementById('btnOKLeaderboard').addEventListener('click', () => this.modalLeaderboard.classList.add('hidden'));
+
+        document.getElementById('btnSaveGameOverScore').addEventListener('click', () => {
+          const name = document.getElementById('inputGameOverName').value;
+          let safeLevel = -1;
+          if (this.currentLevel >= 9) safeLevel = 9;
+          else if (this.currentLevel >= 4) safeLevel = 4;
+
+          this.addLeaderboardEntry(name, safeLevel);
+          this.modalGameOver.classList.add('hidden');
+          this.modalLeaderboard.classList.remove('hidden');
+        });
+
+        document.getElementById('btnSaveWinScore').addEventListener('click', () => {
+          const name = document.getElementById('inputWinName').value;
+          this.addLeaderboardEntry(name, 14);
+          this.fireworks.stop();
+          this.modalWin.classList.add('hidden');
+          this.modalLeaderboard.classList.remove('hidden');
+        });
+
+        document.getElementById('btnToggleAudio').addEventListener('click', () => {
+          audio.enabled = !audio.enabled;
+          document.getElementById('audioIcon').className = audio.enabled ? 
+            'fa-solid fa-volume-high text-amber-400' : 'fa-solid fa-volume-xmark text-slate-500';
+        });
+
+        document.getElementById('btnPlayAgain').addEventListener('click', () => {
+          this.modalGameOver.classList.add('hidden');
+          this.restart();
+        });
+        document.getElementById('btnWinPlayAgain').addEventListener('click', () => {
+          this.fireworks.stop();
+          this.modalWin.classList.add('hidden');
+          this.restart();
+        });
+      }
+
+      renderPrizeLadder() {
+        this.prizeLadderContainer.innerHTML = '';
+
+        PRIZE_TIERS.slice().reverse().forEach((tier) => {
+          const actualIdx = tier.num - 1;
+          const row = document.createElement('div');
+          row.id = `ladderRow-${actualIdx}`;
+          
+          const isMilestone = tier.safe;
+          const numStr = String(tier.num).padStart(2, ' ');
+          const diamondSymbol = (tier.num === 15) ? '&nbsp;&nbsp;' : '◆';
+
+          row.className = `ladder-row ${isMilestone ? 'milestone' : 'standard'}`;
+          row.innerHTML = `
+            <span>${numStr}</span>
+            <span class="diamond text-[10px] ${isMilestone ? 'text-white' : 'text-amber-500'}">${diamondSymbol}</span>
+            <span class="text-right flex-1">${tier.formatted}</span>
+          `;
+          this.prizeLadderContainer.appendChild(row);
+        });
+      }
+
+      updatePrizeLadderUI() {
+        PRIZE_TIERS.forEach((tier, idx) => {
+          const row = document.getElementById(`ladderRow-${idx}`);
+          if (!row) return;
+
+          row.className = 'ladder-row';
+          if (idx === this.currentLevel) {
+            row.classList.add('active');
+          } else if (idx < this.currentLevel) {
+            row.classList.add('passed');
+          } else {
+            if (tier.safe) row.classList.add('milestone');
+            else row.classList.add('standard');
+          }
+        });
+      }
+
+      loadQuestion(levelIdx) {
+        this.currentLevel = levelIdx;
+        this.currentQuestion = QuestionGenerator.generate(levelIdx);
+        this.selectedOptionIdx = null;
+        this.isLocked = false;
+        this.btnLockIn.disabled = true;
+
+        this.textQuestionPrompt.innerText = this.currentQuestion.prompt;
+        this.updatePrizeLadderUI();
+
+        this.btnOptions.forEach((opt, idx) => {
+          opt.btn.disabled = false;
+          opt.btn.className = 'btn-option group p-2.5 sm:p-3 rounded-xl text-left flex items-center gap-2.5 sm:gap-3 w-full';
+          opt.text.innerText = this.currentQuestion.choices[idx];
+        });
+
+        this.renderer.draw(this.currentQuestion);
+      }
+
+      handleOptionClick(idx) {
+        if (this.isLocked) return;
+
+        const now = Date.now();
+        const isDoubleClick = (this.lastClickIdx === idx && (now - this.lastClickTime) < 400);
+        this.lastClickIdx = idx;
+        this.lastClickTime = now;
+
+        if (isDoubleClick) {
+          this.selectedOptionIdx = idx;
+          this.lockInAnswer(idx);
+          return;
+        }
+
+        audio.playClick();
+        this.selectedOptionIdx = idx;
+        this.btnLockIn.disabled = false;
+
+        this.btnOptions.forEach((o, i) => {
+          if (i === idx) {
+            o.btn.classList.add('selected');
+          } else {
+            o.btn.classList.remove('selected');
+          }
+        });
+      }
+
+      animateFlyingAnswer(sourceBtn, targetRow, callback) {
+        const srcRect = sourceBtn.getBoundingClientRect();
+        const dstRect = targetRow.getBoundingClientRect();
+
+        const orb = document.createElement('div');
+        orb.className = 'flying-orb';
+        orb.style.left = `${srcRect.left + srcRect.width / 2 - 10}px`;
+        orb.style.top = `${srcRect.top + srcRect.height / 2 - 10}px`;
+        document.body.appendChild(orb);
+
+        requestAnimationFrame(() => {
+          orb.style.left = `${dstRect.left + dstRect.width / 2 - 10}px`;
+          orb.style.top = `${dstRect.top + dstRect.height / 2 - 10}px`;
+          orb.style.transform = 'scale(1.5)';
+        });
+
+        setTimeout(() => {
+          if (orb.parentNode) orb.parentNode.removeChild(orb);
+          if (callback) callback();
+        }, 800);
+      }
+
+      lockInAnswer(selectedIdx) {
+        this.isLocked = true;
+        this.btnLockIn.disabled = true;
+        audio.playLockIn();
+
+        this.btnOptions.forEach(o => o.btn.disabled = true);
+
+        this.btnOptions[selectedIdx].btn.classList.remove('selected');
+        this.btnOptions[selectedIdx].btn.classList.add('locked');
+
+        const chosenChoiceText = this.currentQuestion.choices[selectedIdx];
+        const isCorrect = (chosenChoiceText === this.currentQuestion.targetChoice);
+
+        setTimeout(() => {
+          this.btnOptions[selectedIdx].btn.classList.remove('locked');
+
+          if (isCorrect) {
+            audio.playCorrect();
+            this.btnOptions[selectedIdx].btn.classList.add('correct');
+
+            const sourceBtn = this.btnOptions[selectedIdx].btn;
+            const targetRow = document.getElementById(`ladderRow-${this.currentLevel}`);
+
+            this.animateFlyingAnswer(sourceBtn, targetRow, () => {
+              if (this.currentLevel >= 14) {
+                audio.playWin();
+                this.fireworks.start();
+                this.modalWin.classList.remove('hidden');
+              } else {
+                this.loadQuestion(this.currentLevel + 1);
+              }
+            });
+
+          } else {
+            audio.playWrong();
+            this.btnOptions[selectedIdx].btn.classList.add('wrong');
+
+            const correctIdx = this.currentQuestion.choices.indexOf(this.currentQuestion.targetChoice);
+            if (correctIdx !== -1) {
+              this.btnOptions[correctIdx].btn.classList.add('correct');
+            }
+
+            setTimeout(() => {
+              let safePrize = "$0";
+              if (this.currentLevel >= 9) safePrize = "$32,000";
+              else if (this.currentLevel >= 4) safePrize = "$1,000";
+
+              document.getElementById('textGameOverPrize').innerText = safePrize;
+              this.modalGameOver.classList.remove('hidden');
+            }, 1200);
+          }
+        }, 1000);
+      }
+
+      use5050() {
+        if (this.lifelines.fiftyFifty || this.isLocked) return;
+        audio.playLifeline();
+        this.lifelines.fiftyFifty = true;
+        this.btn5050.disabled = true;
+
+        const correctChoice = this.currentQuestion.targetChoice;
+        const wrongIndices = [];
+        this.currentQuestion.choices.forEach((choice, i) => {
+          if (choice !== correctChoice) wrongIndices.push(i);
+        });
+
+        wrongIndices.sort(() => Math.random() - 0.5);
+        const disableList = wrongIndices.slice(0, 2);
+
+        disableList.forEach(i => {
+          this.btnOptions[i].btn.classList.add('disabled-5050');
+          this.btnOptions[i].text.innerText = '---';
+        });
+      }
+
+      useAudience() {
+        if (this.lifelines.audience || this.isLocked) return;
+        audio.playLifeline();
+        this.lifelines.audience = true;
+        this.btnAudience.disabled = true;
+
+        const correctChoice = this.currentQuestion.targetChoice;
+        const correctIdx = this.currentQuestion.choices.indexOf(correctChoice);
+
+        let percents = [0, 0, 0, 0];
+        let remaining = 100;
+
+        const correctWeight = this.currentLevel < 8 ? Math.floor(Math.random() * 20) + 60 : Math.floor(Math.random() * 20) + 45;
+        percents[correctIdx] = correctWeight;
+        remaining -= correctWeight;
+
+        const activeIndices = [];
+        this.btnOptions.forEach((opt, i) => {
+          if (i !== correctIdx && !opt.btn.classList.contains('disabled-5050')) {
+            activeIndices.push(i);
+          }
+        });
+
+        if (activeIndices.length === 1) {
+          percents[activeIndices[0]] = remaining;
+        } else if (activeIndices.length > 1) {
+          const firstShare = Math.floor(Math.random() * remaining);
+          percents[activeIndices[0]] = firstShare;
+          percents[activeIndices[1]] = remaining - firstShare;
+        } else {
+          percents[correctIdx] += remaining;
+        }
+
+        ['A', 'B', 'C', 'D'].forEach((key, i) => {
+          document.getElementById(`valBar${key}`).innerText = `${percents[i]}%`;
+          document.getElementById(`bar${key}`).style.height = `${percents[i]}%`;
+        });
+
+        this.modalAudience.classList.remove('hidden');
+      }
+
+      usePhone() {
+        if (this.lifelines.phone || this.isLocked) return;
+        audio.playLifeline();
+        this.lifelines.phone = true;
+        this.btnPhone.disabled = true;
+
+        const dialogue = document.getElementById('phoneDialogueText');
+        dialogue.textContent = '';
+        this.modalPhone.classList.remove('hidden');
+
+        const level = this.currentLevel;
+        let tip = "";
+
+        if (level <= 6) {
+          tip = "Remember standard formulas:\n• Rectangle Area = base × height\n• Triangle Area = ½ × base × height\n• Parallelogram Area = base × perpendicular height!";
+        } else {
+          tip = "This is a COMPOSITE shape! Break it down into individual rectangles, triangles, or parallelograms. Calculate each area separately, then combine them!";
+        }
+
+        const fullText = `"Hello! Alex here.\n\n${tip}"`;
+
+        let i = 0;
+        let typedText = '';
+        const timer = setInterval(() => {
+          typedText += fullText.charAt(i);
+          dialogue.textContent = typedText;
+          i++;
+          if (i >= fullText.length) clearInterval(timer);
+        }, 22);
+      }
+
+      restart() {
+        this.lifelines = { fiftyFifty: false, audience: false, phone: false };
+        this.btn5050.disabled = false;
+        this.btnAudience.disabled = false;
+        this.btnPhone.disabled = false;
+
+        this.btnOptions.forEach(o => o.btn.classList.remove('disabled-5050'));
+        this.loadQuestion(0);
+      }
+    }
+
+    window.onload = () => {
+      window.app = new MillionaireGame();
+    };
+  </script>
+</body>
+</html>
